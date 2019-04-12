@@ -1,7 +1,7 @@
 # Личный проект «Readme»
 
 * Студент: [Борис Муковнин](https://up.htmlacademy.ru/php/9/user/814733).
-* Наставник: [Максим Деев] (https://htmlacademy.ru/profile/id685777).
+* Наставник: [Максим Деев](https://htmlacademy.ru/profile/id685777).
 
 ---
 
