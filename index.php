@@ -360,7 +360,7 @@ function truncate_text($text, $length = 300)
 
                     <?php elseif ($post['type'] == 'post-text'): ?>
                     <!--содержимое для поста-текста-->
-                    <?= truncate_text($post['content'], 300); ?>
+                    <?= truncate_text($post['content']); ?>
                     <?php endif; ?>
                 </div>
                 <footer class="post__footer">
