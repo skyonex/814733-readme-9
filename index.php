@@ -60,12 +60,10 @@ function truncate_text($text, $length = 300)
 {
     if (mb_strlen($text) > $length) {
         $max_position = 0;
-        $truncated = false;
         $words = [];
-        
+
         foreach (explode(" ", $text) as $word) {
             if (mb_strlen($word) + $max_position > $length) {
-                $truncated = true;
                 break;
             }
 
@@ -73,9 +71,7 @@ function truncate_text($text, $length = 300)
             $max_position += mb_strlen($word) + 1;
         }
 
-        if ($truncated) {
-            return '<p>' . implode(" ", $words) . '...</p><a class="post-text__more-link" href="#">Читать далее</a>';
-        }
+        return '<p>' . implode(" ", $words) . '...</p><a class="post-text__more-link" href="#">Читать далее</a>';
     }
 
     return '<p>' . $text . '</p>';
