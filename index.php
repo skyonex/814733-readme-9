@@ -38,8 +38,46 @@ $popular_posts = [
         'content' => 'www.htmlacademy.ru',
         'author' => 'Владик',
         'avatar' => 'userpic.jpg'
-    ]
+    ],
+    [
+        'subject' => 'Полезный пост про Байкал',
+        'type' => 'post-text',
+        'content' => 'Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках.',
+        'author' => 'Лариса',
+        'avatar' => 'userpic-larisa-small.jpg'
+    ],
 ];
+
+/**
+ * Функция обрезает текстовое содержимое,
+ * если оно превышает заданное число символов.
+ *
+ * @param $text
+ * @param int $length
+ * @return string
+ */
+function truncate_text($text, $length = 300)
+{
+    $max_position = 0;
+    $truncated = false;
+    $words = [];
+
+    foreach (explode(" ", $text) as $word) {
+        if (mb_strlen($word) + $max_position > $length) {
+            $truncated = true;
+            break;
+        }
+
+        $words[] = $word;
+        $max_position += mb_strlen($word) + 1;
+    }
+
+    if ($truncated) {
+        return '<p>' . implode(" ", $words) . '...</p><a class="post-text__more-link" href="#">Читать далее</a>';
+    }
+
+    return '<p>' . $text . '</p>';
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -322,7 +360,7 @@ $popular_posts = [
 
                     <?php elseif ($post['type'] == 'post-text'): ?>
                     <!--содержимое для поста-текста-->
-                    <p><?= $post['content']; ?></p>
+                    <?= truncate_text($post['content'], 300); ?>
                     <?php endif; ?>
                 </div>
                 <footer class="post__footer">
