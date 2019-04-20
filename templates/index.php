@@ -151,7 +151,7 @@
                         </div>
                         <div class="post__info">
                             <b class="post__author-name">Лариса Роговая</b>
-                            <time class="post__time" datetime="2019-03-30">Месяц назад</time>
+                            <time class="post__time" datetime="<?= $post['datetime']; ?>" title="<?= date("d.m.Y H:i", strtotime($post['datetime'])); ?>"><?= dateDifference(strtotime($post['datetime']), time()); ?></time>
                         </div>
                     </a>
                 </div>
