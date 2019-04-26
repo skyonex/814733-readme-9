@@ -107,6 +107,7 @@ CREATE TABLE `posts` (
   `img_url` varchar(256) DEFAULT NULL,
   `link_url` varchar(256) DEFAULT NULL,
   `video_url` varchar(256) DEFAULT NULL,
+  `quote_author` varchar(32) NOT NULL,
   `total_views` int(10) UNSIGNED DEFAULT NULL,
   `created_ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `author_id` int(11) NOT NULL,
