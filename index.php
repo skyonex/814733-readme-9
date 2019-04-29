@@ -2,65 +2,38 @@
 
 date_default_timezone_set('Europe/Moscow');
 
+require_once 'config.php';
 require_once 'helpers.php';
 require_once 'functions.php';
+
+$db = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+$db->set_charset('utf8');
 
 $is_auth = rand(0, 1);
 
 $username = 'Борис'; // укажите здесь ваше имя
 
-$popular_posts = [
-    [
-        'subject' => 'Цитата',
-        'type' => 'post-quote',
-        'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
-        'author' => 'Лариса',
-        'avatar' => 'userpic-larisa-small.jpg',
-        'datetime' => generate_random_date(mt_rand(0,4))
-    ],
-    [
-        'subject' => 'Игра пристолов',
-        'type' => 'post-text',
-        'content' => 'Не могу дождаться начала финального сезона своего любимого сериала!',
-        'author' => 'Владик',
-        'avatar' => 'userpic.jpg',
-        'datetime' => generate_random_date(mt_rand(0,4))
-    ],
-    [
-        'subject' => 'Наконец, обработал фотки!',
-        'type' => 'post-photo',
-        'content' => 'rock-medium.jpg',
-        'author' => 'Виктор',
-        'avatar' => 'userpic-mark.jpg',
-        'datetime' => generate_random_date(mt_rand(0,4))
-    ],
-    [
-        'subject' => 'Моя мечта',
-        'type' => 'post-photo',
-        'content' => 'coast-medium.jpg',
-        'author' => 'Лариса',
-        'avatar' => 'userpic-larisa-small.jpg',
-        'datetime' => generate_random_date(mt_rand(0,4))
-    ],
-    [
-        'subject' => 'Лучшие курсы',
-        'type' => 'post-link',
-        'content' => 'www.htmlacademy.ru',
-        'author' => 'Владик',
-        'avatar' => 'userpic.jpg',
-        'datetime' => generate_random_date(mt_rand(0,4))
-    ],
-    [
-        'subject' => 'Полезный пост про Байкал',
-        'type' => 'post-text',
-        'content' => 'Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках.',
-        'author' => 'Лариса',
-        'avatar' => 'userpic-larisa-small.jpg',
-        'datetime' => generate_random_date(mt_rand(0,4))
-    ],
-];
+$sql = 'SELECT * FROM content_types ORDER BY id';
+$result = $db->query($sql);
 
-$page_content = include_template('index.php', ['popular_posts' => $popular_posts]);
+$content_types = $result->fetch_all(MYSQLI_ASSOC);
+
+$sql = 'SELECT t1.id as pid, subject, content, username, quote_author, class_name, count(t2.from_id) as total_likes, avatar_url, link_url, img_url, video_url, created_ts 
+FROM posts as t1 
+LEFT join likes as t2 on t1.id=t2.post_id 
+join users as t3 on t1.author_id=t3.id 
+join content_types as t4 on t1.content_type=t4.id
+group by t1.id
+ORDER BY total_likes DESC';
+$result = $db->query($sql);
+
+$popular_posts = $result->fetch_all(MYSQLI_ASSOC);
+
+$page_content = include_template('index.php', [
+        'popular_posts' => $popular_posts,
+        'content_types' => $content_types
+    ]
+);
 $layout = include_template('layout.php', [
         'content' => $page_content,
         'title' => 'readme: популярное',
