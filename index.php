@@ -7,7 +7,7 @@ require_once 'helpers.php';
 require_once 'functions.php';
 
 $db = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-$db->set_charset('utf8');
+$db->set_charset(DB_CHARSET);
 
 $is_auth = rand(0, 1);
 
