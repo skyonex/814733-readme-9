@@ -6,43 +6,33 @@
         <div class="popular__sorting sorting">
             <b class="popular__sorting-caption sorting__caption">Сортировка:</b>
             <ul class="popular__sorting-list sorting__list">
-                <li class="sorting__item sorting__item--popular">
-                    <a class="sorting__link sorting__link--active" href="#">
-                        <span>Популярность</span>
+                <?php foreach ($sorting_items as $sorting_key => $sorting_title): ?>
+                <li class="sorting__item<?php if ($sorting_key == 'popular'): ?> sorting__item--popular<?php endif; ?>">
+                    <?php if ($sorting_key == $sort_by): ?>
+                    <a class="sorting__link sorting__link--active<?php if($sort_order == 'asc'): ?> sorting__link--reverse<?php endif; ?>" href="/?sort=<?= $sorting_key; ?>&order=<?= ($sort_order == 'desc') ? 'asc' : 'desc';?>&ct=<?= $current_content_type; ?>">
+                    <?php else: ?>
+                    <a class="sorting__link" href="/?sort=<?= $sorting_key; ?>&ct=<?= $current_content_type; ?>">
+                    <?php endif; ?>
+                        <span><?= $sorting_title; ?></span>
                         <svg class="sorting__icon" width="10" height="12">
                             <use xlink:href="#icon-sort"></use>
                         </svg>
                     </a>
                 </li>
-                <li class="sorting__item">
-                    <a class="sorting__link" href="#">
-                        <span>Лайки</span>
-                        <svg class="sorting__icon" width="10" height="12">
-                            <use xlink:href="#icon-sort"></use>
-                        </svg>
-                    </a>
-                </li>
-                <li class="sorting__item">
-                    <a class="sorting__link" href="#">
-                        <span>Дата</span>
-                        <svg class="sorting__icon" width="10" height="12">
-                            <use xlink:href="#icon-sort"></use>
-                        </svg>
-                    </a>
-                </li>
+                <?php endforeach; ?>
             </ul>
         </div>
         <div class="popular__filters filters">
             <b class="popular__filters-caption filters__caption">Тип контента:</b>
             <ul class="popular__filters-list filters__list">
                 <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                    <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+                    <a class="filters__button filters__button--ellipse filters__button--all<?php if ($current_content_type == 0): ?> filters__button--active<?php endif; ?>" href="/">
                         <span>Все</span>
                     </a>
                 </li>
                 <?php foreach ($content_types as $content_type): ?>
                 <li class="popular__filters-item filters__item">
-                    <a class="filters__button filters__button--<?= $content_type['class_name']; ?> button" href="#">
+                    <a class="filters__button filters__button--<?= $content_type['class_name']; ?> button<?php if ($current_content_type == $content_type['id']): ?> filters__button--active<?php endif; ?>" href="/?ct=<?= $content_type['id']; ?>">
                         <span class="visually-hidden"><?= $content_type['title']; ?></span>
                         <svg class="filters__icon" width="22" height="18">
                             <use xlink:href="#icon-filter-<?= $content_type['class_name']; ?>"></use>
@@ -57,7 +47,7 @@
         <?php foreach ($popular_posts as $post): ?>
         <article class="popular__post post post-<?= $post['class_name']; ?>">
             <header class="post__header">
-                <h2><a href="#"><?= esc($post['subject']); ?></a></h2>
+                <h2><a href="/post.php?id=<?= $post['pid']; ?>"><?= esc($post['subject']); ?></a></h2>
             </header>
             <div class="post__main">
             <?php if ($post['class_name'] == 'quote'): ?>
@@ -121,7 +111,7 @@
                         </div>
                         <div class="post__info">
                             <b class="post__author-name"><?= esc($post['username']); ?></b>
-                            <time class="post__time" datetime="<?= $post['created_ts']; ?>" title="<?= date("d.m.Y H:i", strtotime($post['created_ts'])); ?>"><?= dateDifference(strtotime($post['created_ts']), time()); ?></time>
+                            <time class="post__time" datetime="<?= $post['created_ts']; ?>" title="<?= date("d.m.Y H:i", strtotime($post['created_ts'])); ?>"><?= date_difference(strtotime($post['created_ts']), time()); ?></time>
                         </div>
                     </a>
                 </div>
