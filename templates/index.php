@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"><?= esc($post['username']); ?></b>
-                                    <time class="post__time" datetime="<?= $post['created_ts']; ?>" title="<?= date("d.m.Y H:i", strtotime($post['created_ts'])); ?>"><?= date_difference(strtotime($post['created_ts']), time()); ?></time>
+                                    <time class="post__time" datetime="<?= $post['created_ts']; ?>" title="<?= date("d.m.Y H:i", strtotime($post['created_ts'])); ?>"><?= date_difference(strtotime($post['created_ts']), time()) . ' назад'; ?></time>
                                 </div>
                             </a>
                         </div>

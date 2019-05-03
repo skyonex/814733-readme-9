@@ -40,7 +40,7 @@ $page_content = include_template('index.php', [
 
 $layout = include_template('layout.php', [
         'content' => $page_content,
-        'title' => 'readme: популярное',
+        'title' => 'популярное',
         'is_auth' => $is_auth,
         'username' => $username
     ]
