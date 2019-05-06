@@ -13,30 +13,34 @@ $is_auth = rand(0, 1);
 
 $username = 'Борис'; // укажите здесь ваше имя
 
-$sql = 'SELECT * FROM content_types ORDER BY id';
-$result = $db->query($sql);
+$sorting_items = [
+    'popular' => 'Популярность',
+    'likes' => 'Лайки',
+    'date' => 'Дата'
+];
 
-$content_types = $result->fetch_all(MYSQLI_ASSOC);
+$sort_by = (isset($_GET['sort']) && array_key_exists($_GET['sort'], $sorting_items)) ? $_GET['sort'] : 'popular';
 
-$sql = 'SELECT t1.id as pid, subject, content, username, quote_author, class_name, count(t2.from_id) as total_likes, avatar_url, link_url, img_url, video_url, created_ts 
-FROM posts as t1 
-LEFT join likes as t2 on t1.id=t2.post_id 
-join users as t3 on t1.author_id=t3.id 
-join content_types as t4 on t1.content_type=t4.id
-group by t1.id
-ORDER BY total_likes DESC';
-$result = $db->query($sql);
+$sort_order = (isset($_GET['order']) && in_array($_GET['order'], ['asc', 'desc'])) ? $_GET['order'] : 'desc';
 
-$popular_posts = $result->fetch_all(MYSQLI_ASSOC);
+$content_types = get_content_types($db);
+$current_content_type = (isset($_GET['ct']) && array_key_exists($_GET['ct'], $content_types)) ? $_GET['ct'] : 0;
+
+$popular_posts = get_popular_posts_list($db, $current_content_type, $sort_by, $sort_order);
 
 $page_content = include_template('index.php', [
         'popular_posts' => $popular_posts,
-        'content_types' => $content_types
+        'content_types' => $content_types,
+        'current_content_type' => $current_content_type,
+        'sorting_items' => $sorting_items,
+        'sort_by' => $sort_by,
+        'sort_order' => $sort_order
     ]
 );
+
 $layout = include_template('layout.php', [
         'content' => $page_content,
-        'title' => 'readme: популярное',
+        'title' => 'популярное',
         'is_auth' => $is_auth,
         'username' => $username
     ]
